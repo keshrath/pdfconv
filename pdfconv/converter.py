@@ -119,6 +119,8 @@ def convert_presentation2pdf(input_path, output_path):
         try:
             _convert_powerpoint2pdf(input_path, output_path)
         except IOError as error:
+            raise
+        except (ImportError, WindowsError) as error:
             logger.info("Failed to use MS Office | %s | Fallback to unoconv" % error)
             _convert_unoconv2pdf(input_path, output_path)
     else:
@@ -136,6 +138,8 @@ def convert_spreadsheet2pdf(input_path, output_path):
         try:
             _convert_excel2pdf(input_path, output_path)
         except IOError as error:
+            raise
+        except (ImportError, WindowsError) as error:
             logger.info("Failed to use MS Office | %s | Fallback to unoconv" % error)
             _convert_unoconv2pdf(input_path, output_path)
     else:
