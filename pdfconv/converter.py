@@ -147,6 +147,7 @@ def convert_spreadsheet2pdf(input_path, output_path):
             
 def _convert_word2pdf(input_path, output_path):
     try:
+        import pythoncom
         import comtypes
         import comtypes.client
     except ImportError as error:
@@ -154,6 +155,7 @@ def _convert_word2pdf(input_path, output_path):
     else:
         word = doc = None
         try:
+            comtypes.CoInitialize()
             word = comtypes.client.CreateObject('Word.Application')
             doc = word.Documents.Open(input_path)
             doc.SaveAs(output_path, FileFormat=WD_FORMAT_PDF)
@@ -164,6 +166,7 @@ def _convert_word2pdf(input_path, output_path):
         finally:
             doc and doc.Close()
             word and word.Quit()
+            comtypes.CoUninitialize()
             
 def _convert_powerpoint2pdf(input_path, output_path):
     try:
@@ -174,6 +177,7 @@ def _convert_powerpoint2pdf(input_path, output_path):
     else:
         powerpoint = slides = None
         try:
+            comtypes.CoInitialize()
             powerpoint = comtypes.client.CreateObject('Powerpoint.Application')
             slides = powerpoint.Presentations.Open(input_path)
             slides.SaveAs(output_path, FileFormat=PP_FORMAT_PDF)
@@ -184,6 +188,7 @@ def _convert_powerpoint2pdf(input_path, output_path):
         finally:
             slides and slides.Close()
             powerpoint and powerpoint.Quit()
+            comtypes.CoUninitialize()
             
 def _convert_excel2pdf(input_path, output_path):
     try:
@@ -194,6 +199,7 @@ def _convert_excel2pdf(input_path, output_path):
     else:
         excel = wb = None
         try:
+            comtypes.CoInitialize()
             excel = comtypes.client.CreateObject('Excel.Application')
             wb = excel.Workbooks.Open(input_path)
             wb.SaveAs(output_path, FileFormat=EX_FORMAT_PDF)
@@ -204,6 +210,7 @@ def _convert_excel2pdf(input_path, output_path):
         finally:
             wb and wb.Close()
             excel and excel.Quit()
+            comtypes.CoUninitialize()
 
 def _convert_unoconv2pdf(input_path, output_path):
     try:
