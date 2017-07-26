@@ -33,12 +33,20 @@ class TestConverter(unittest.TestCase):
     def setUp(self):
         pass
  
-    def test_convert(self):
+    def test_convert_docx(self):
         input_path = os.path.join(current_directory, 'data/input_docx.docx')
         with closing(open(input_path, 'rb')) as file:
-            output_path = pdfconv.converter.convert_binary2pdf(file.read(), None, "input_docx.docx")
-            self.assertTrue(os.path.isfile(output_path))
-            os.remove(output_path)    
+            self.assertTrue(pdfconv.converter.convert_binary2pdf(file.read(), None, "input_docx.docx"))
+            
+    def test_convert_pptx(self):
+        input_path = os.path.join(current_directory, 'data/input_pptx.pptx')
+        with closing(open(input_path, 'rb')) as file:
+            self.assertTrue(pdfconv.converter.convert_binary2pdf(file.read(), None, "input_pptx.pptx"))    
+            
+    def test_convert_xlsx(self):
+        input_path = os.path.join(current_directory, 'data/input_xlsx.xlsx')
+        with closing(open(input_path, 'rb')) as file:
+            self.assertTrue(pdfconv.converter.convert_binary2pdf(file.read(), None, "input_xlsx.xlsx"))  
         
     def test_convert_document2pdf_odt(self):
         input_path = os.path.join(current_directory, 'data/input_odt.odt')

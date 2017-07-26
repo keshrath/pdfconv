@@ -35,7 +35,7 @@ def read(fname):
 
 setup(
     name = "pdfconv",
-    version = "1.0.5",
+    version = "1.0.6",
     author = "Mathias Markl",
     author_email = "mathias.markl@mukit.at",
     description = "PDF Converter",

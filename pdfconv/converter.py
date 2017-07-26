@@ -40,14 +40,14 @@ WD_FORMAT_PDF = 17
 PP_FORMAT_PDF = 32
 EX_FORMAT_PDF = 57
 
-def convert_binary2pdf(binary, mimetype=None, filename=None, format="path"):
+def convert_binary2pdf(binary, mimetype=None, filename=None, format="binary"):
     """
     Converts a binary value to a PDF file.
 
     :param binary: The binary value
     :param mimetype: The mime tpye of the binary value
     :param filename: The filename of the binary value
-    :param format: The output format (path, binary, file, base64 | default: path)
+    :param format: The output format (binary, file, base64 | default: binary)
     :return: returns output depending on the given format
     """
     if not mimetype and not filename:
@@ -59,34 +59,30 @@ def convert_binary2pdf(binary, mimetype=None, filename=None, format="path"):
             extension =  mimetypes.guess_extension(mimetype)
         else:
             extension = os.path.splitext(filename)[1]
-        tmp_wfile, tmp_wpath = tempfile.mkstemp(suffix=extension)
-        tmp_pfile, tmp_ppath = tempfile.mkstemp(suffix=".pdf")
-        if os.name == 'nt':
-            tmp_wpath = tmp_wpath.replace("\\","\\\\")
-            tmp_ppath = tmp_ppath.replace("\\","\\\\")
-        with closing(os.fdopen(tmp_wfile, 'w')) as file:
-            file.write(binary)
-        (os.fdopen(tmp_pfile)).close()
-        __dispatch[mimetype](tmp_wpath, tmp_ppath)
-        os.remove(tmp_wpath)
-        if format == 'path':
-            return tmp_ppath
-        else:
-            try:
-                with closing(open(tmp_ppath, 'rb')) as file:
-                    if format == 'binary':
-                        return file.read()
-                    elif format == 'file':
-                        output = io.BytesIO()
-                        output.write(file.read())
-                        output.close()
-                        return output
-                    elif format == 'base64':
-                        return base64.b64encode(file.read())
-                    else:
-                        raise ValueError("Unknown format type. Use one of these: path, binary, file, base64")
-            finally:
-                os.remove(tmp_ppath)
+        tmp_dir = tempfile.mkdtemp()
+        try:
+            tmp_wpath = os.path.join(tmp_dir, "tmpfile" + extension)
+            tmp_ppath = os.path.join(tmp_dir, "tmpfile.pdf")
+            if os.name == 'nt':
+                tmp_wpath = tmp_wpath.replace("\\","/")
+                tmp_ppath = tmp_ppath.replace("\\","/")
+            with closing(open(tmp_wpath, 'wb')) as file:
+                file.write(binary)
+            __dispatch[mimetype](tmp_wpath, tmp_ppath)
+            with closing(open(tmp_ppath, 'rb')) as file:
+                if format == 'binary':
+                    return file.read()
+                elif format == 'file':
+                    output = io.BytesIO()
+                    output.write(file.read())
+                    output.close()
+                    return output
+                elif format == 'base64':
+                    return base64.b64encode(file.read())
+                else:
+                    raise ValueError("Unknown format type. Use one of these: path, binary, file, base64")
+        finally:
+            shutil.rmtree(tmp_dir)
         
 def convert_document2pdf(input_path, output_path):
     """
