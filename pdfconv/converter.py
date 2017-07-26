@@ -209,7 +209,7 @@ def _convert_excel2pdf(input_path, output_path):
 
 def _convert_unoconv2pdf(input_path, output_path):
     try:
-        p = subprocess.Popen(['unoconv', 'f pdf', '-o %s' % output_path, input_path], stdout=subprocess.PIPE)
+        p = subprocess.Popen(['unoconv', '-f pdf', '-o %s' % output_path, input_path], stdout=subprocess.PIPE)
         p.communicate()
         p.wait()
     except subprocess.CalledProcessError:
