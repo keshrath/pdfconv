@@ -143,10 +143,9 @@ def convert_spreadsheet2pdf(input_path, output_path):
             
 def _convert_word2pdf(input_path, output_path):
     try:
-        import pythoncom
         import comtypes
         import comtypes.client
-    except ImportError as error:
+    except ImportError:
         raise 
     else:
         word = doc = None
@@ -155,7 +154,7 @@ def _convert_word2pdf(input_path, output_path):
             word = comtypes.client.CreateObject('Word.Application')
             doc = word.Documents.Open(input_path)
             doc.SaveAs(output_path, FileFormat=WD_FORMAT_PDF)
-        except WindowsError as error:
+        except WindowsError:
             raise
         except comtypes.COMError as error:
             raise IOError(error)
@@ -168,7 +167,7 @@ def _convert_powerpoint2pdf(input_path, output_path):
     try:
         import comtypes
         import comtypes.client
-    except ImportError as error:
+    except ImportError:
         raise 
     else:
         powerpoint = slides = None
@@ -177,7 +176,7 @@ def _convert_powerpoint2pdf(input_path, output_path):
             powerpoint = comtypes.client.CreateObject('Powerpoint.Application')
             slides = powerpoint.Presentations.Open(input_path)
             slides.SaveAs(output_path, FileFormat=PP_FORMAT_PDF)
-        except WindowsError as error:
+        except WindowsError:
             raise
         except comtypes.COMError as error:
             raise IOError(error)
@@ -190,7 +189,7 @@ def _convert_excel2pdf(input_path, output_path):
     try:
         import comtypes
         import comtypes.client
-    except ImportError as error:
+    except ImportError:
         raise 
     else:
         excel = wb = None
@@ -199,7 +198,7 @@ def _convert_excel2pdf(input_path, output_path):
             excel = comtypes.client.CreateObject('Excel.Application')
             wb = excel.Workbooks.Open(input_path)
             wb.SaveAs(output_path, FileFormat=EX_FORMAT_PDF)
-        except WindowsError as error:
+        except WindowsError:
             raise
         except comtypes.COMError as error:
             raise IOError(error)
@@ -213,9 +212,9 @@ def _convert_unoconv2pdf(input_path, output_path):
         p = subprocess.Popen(['unoconv', 'f pdf', '-o %s' % output_path, input_path], stdout=subprocess.PIPE)
         p.communicate()
         p.wait()
-    except subprocess.CalledProcessError as error:
+    except subprocess.CalledProcessError:
         raise
-    except WindowsError as error:
+    except WindowsError:
         raise
     
 __dispatch  = {
