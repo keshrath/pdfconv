@@ -1,4 +1,4 @@
-|license| |covecov| |build-status|
+|license| |build| |covecov| |codacy|
 
 PDF Converter
 *************
@@ -27,6 +27,9 @@ Dependencies
     :alt: License: GPL v2
     :scale: 100%
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+
+.. |build| image:: https://travis-ci.org/keshrath/pdfconv.svg?branch=master
+    :target: https://travis-ci.org/keshrath/pdfconv
 
 .. |covecov| image:: https://codecov.io/gh/keshrath/pdfconv/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/keshrath/pdfconv
