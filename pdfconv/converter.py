@@ -214,7 +214,7 @@ def _convert_unoconv2pdf(input_path, output_path):
         p.wait()
     except subprocess.CalledProcessError:
         raise
-    except WindowsError:
+    except OSError:
         raise
     
 __dispatch  = {
