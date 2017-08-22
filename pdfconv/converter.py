@@ -97,7 +97,7 @@ def convert_document2pdf(input_path, output_path):
             _convert_word2pdf(input_path, output_path)
         except IOError as error:
             raise
-        except (ImportError, WindowsError) as error:
+        except (ImportError, OSError) as error:
             logger.info("Failed to use MS Office | %s | Fallback to unoconv" % error)
             _convert_unoconv2pdf(input_path, output_path)
     else:
@@ -116,7 +116,7 @@ def convert_presentation2pdf(input_path, output_path):
             _convert_powerpoint2pdf(input_path, output_path)
         except IOError as error:
             raise
-        except (ImportError, WindowsError) as error:
+        except (ImportError, OSError) as error:
             logger.info("Failed to use MS Office | %s | Fallback to unoconv" % error)
             _convert_unoconv2pdf(input_path, output_path)
     else:
@@ -135,7 +135,7 @@ def convert_spreadsheet2pdf(input_path, output_path):
             _convert_excel2pdf(input_path, output_path)
         except IOError as error:
             raise
-        except (ImportError, WindowsError) as error:
+        except (ImportError, OSError) as error:
             logger.info("Failed to use MS Office | %s | Fallback to unoconv" % error)
             _convert_unoconv2pdf(input_path, output_path)
     else:
@@ -154,8 +154,8 @@ def _convert_word2pdf(input_path, output_path):
             word = comtypes.client.CreateObject('Word.Application')
             doc = word.Documents.Open(input_path)
             doc.SaveAs(output_path, FileFormat=WD_FORMAT_PDF)
-        except WindowsError:
-            raise
+        except WindowsError as error:
+            raise OSError(error)
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
@@ -176,8 +176,8 @@ def _convert_powerpoint2pdf(input_path, output_path):
             powerpoint = comtypes.client.CreateObject('Powerpoint.Application')
             slides = powerpoint.Presentations.Open(input_path)
             slides.SaveAs(output_path, FileFormat=PP_FORMAT_PDF)
-        except WindowsError:
-            raise
+        except WindowsError as error:
+            raise OSError(error)
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
@@ -198,8 +198,8 @@ def _convert_excel2pdf(input_path, output_path):
             excel = comtypes.client.CreateObject('Excel.Application')
             wb = excel.Workbooks.Open(input_path)
             wb.SaveAs(output_path, FileFormat=EX_FORMAT_PDF)
-        except WindowsError:
-            raise
+        except WindowsError as error:
+            raise OSError(error)
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
