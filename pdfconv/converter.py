@@ -126,7 +126,7 @@ def convert_spreadsheet2pdf(input_path, output_path):
     """
     Converts a file to a PDF file.
 
-    :param input_path: The input path
+    :param input_path: The input path]
     :param output_path: The output path
     :return: returns nothing
     """
@@ -209,12 +209,14 @@ def _convert_excel2pdf(input_path, output_path):
 
 def _convert_unoconv2pdf(input_path, output_path):
     try:
-        p = subprocess.Popen(['unoconv', '-f pdf', '-o %s' % output_path, input_path], stdout=subprocess.PIPE)
+        env = os.environ.copy()
+        del env['PYTHONPATH']
+        p = subprocess.Popen(['unoconv', '--format=pdf', '--output=%s' % output_path, input_path], stdout=subprocess.PIPE, env=env)
         p.communicate()
         p.wait()
     except subprocess.CalledProcessError:
         raise
-    except OSError:
+    except OSError as error:
         raise
     
 __dispatch  = {
@@ -223,15 +225,15 @@ __dispatch  = {
     'application/vnd.ms-word.document.macroEnabled.12': convert_document2pdf,
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': convert_document2pdf,
     'application/vnd.oasis.opendocument.text': convert_document2pdf,
-    'application/vnd.mspowerpoint': _convert_powerpoint2pdf,
-    'application/vnd.ms-powerpoint': _convert_powerpoint2pdf,
-    'application/vnd.ms-powerpoint.addin.macroEnabled.12': _convert_powerpoint2pdf,
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': _convert_powerpoint2pdf,
-    'application/vnd.oasis.opendocument.presentation': _convert_powerpoint2pdf,
-    'application/vnd.msexcel': _convert_excel2pdf,
-    'application/vnd.ms-excel': _convert_excel2pdf,
-    'application/vnd.ms-excel.sheet.macroEnabled.12': _convert_excel2pdf,
-    'application/vnd.ms-excel.sheet.binary.macroEnabled.12': _convert_excel2pdf,
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': _convert_excel2pdf,
-    'application/vnd.oasis.opendocument.spreadsheet': _convert_excel2pdf,
+    'application/vnd.mspowerpoint': convert_presentation2pdf,
+    'application/vnd.ms-powerpoint': convert_presentation2pdf,
+    'application/vnd.ms-powerpoint.addin.macroEnabled.12': convert_presentation2pdf,
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': convert_presentation2pdf,
+    'application/vnd.oasis.opendocument.presentation': convert_presentation2pdf,
+    'application/vnd.msexcel': convert_spreadsheet2pdf,
+    'application/vnd.ms-excel': convert_spreadsheet2pdf,
+    'application/vnd.ms-excel.sheet.macroEnabled.12': convert_spreadsheet2pdf,
+    'application/vnd.ms-excel.sheet.binary.macroEnabled.12': convert_spreadsheet2pdf,
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': convert_spreadsheet2pdf,
+    'application/vnd.oasis.opendocument.spreadsheet': convert_spreadsheet2pdf,
 }
