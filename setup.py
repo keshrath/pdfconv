@@ -35,12 +35,12 @@ def read(fname):
 
 setup(
     name = "pdfconv",
-    version = "1.0.9",
+    version = "1.0.10",
     author = "Mathias Markl",
     author_email = "mathias.markl@mukit.at",
     description = "PDF Converter",
     license = "GPLv2",
-    keywords = "example documentation tutorial",
+    keywords = "converter pdf library",
     url = "https://github.com/keshrath/pdfconv",
     packages = find_packages(exclude=['contrib', 'docs', 'tests']),
     long_description = read('README.rst'),
