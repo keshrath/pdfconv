@@ -210,7 +210,8 @@ def _convert_excel2pdf(input_path, output_path):
 def _convert_unoconv2pdf(input_path, output_path):
     try:
         env = os.environ.copy()
-        del env['PYTHONPATH']
+        if 'PYTHONPATH' in env:
+            del env['PYTHONPATH']
         p = subprocess.Popen(['unoconv', '--format=pdf', '--output=%s' % output_path, input_path], stdout=subprocess.PIPE, env=env)
         p.communicate()
         p.wait()
