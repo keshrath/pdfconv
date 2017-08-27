@@ -159,8 +159,10 @@ def _convert_word2pdf(input_path, output_path):
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
-            doc and doc.Close()
-            word and word.Quit()
+            if doc:
+                doc.Close()
+            if word: 
+                word.Quit()
             comtypes.CoUninitialize()
             
 def _convert_powerpoint2pdf(input_path, output_path):
@@ -181,8 +183,10 @@ def _convert_powerpoint2pdf(input_path, output_path):
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
-            slides and slides.Close()
-            powerpoint and powerpoint.Quit()
+            if slides:
+                slides.Close()
+            if powerpoint: 
+                powerpoint.Quit()
             comtypes.CoUninitialize()
             
 def _convert_excel2pdf(input_path, output_path):
@@ -203,8 +207,10 @@ def _convert_excel2pdf(input_path, output_path):
         except comtypes.COMError as error:
             raise IOError(error)
         finally:
-            wb and wb.Close()
-            excel and excel.Quit()
+            if wb:
+                wb.Close()
+            if excel: 
+                excel.Quit()
             comtypes.CoUninitialize()
 
 def _convert_unoconv2pdf(input_path, output_path):
@@ -217,7 +223,7 @@ def _convert_unoconv2pdf(input_path, output_path):
         p.wait()
     except subprocess.CalledProcessError:
         raise
-    except OSError as error:
+    except OSError:
         raise
     
 __dispatch  = {
