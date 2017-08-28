@@ -11,11 +11,11 @@ types to PDF. It can be used on Windows as well as Linux.
 
 To do the actual conversion pdfconv relays on comtypes and unoconv.
 
-	* Windows: 
-             * comtypes
-             * unoconv
-	* Linux:
-             * unoconv
+* Windows: 
+     * comtypes
+     * unoconv
+* Linux:
+     * unoconv
 
 Dependencies
 ============
